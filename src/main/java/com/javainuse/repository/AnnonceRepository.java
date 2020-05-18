@@ -2,6 +2,8 @@ package com.javainuse.repository;
 
 import java.util.List;
 
+
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,7 +17,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import com.javainuse.model.Annonce;
 
 @Repository
-@RepositoryRestResource
+@RepositoryRestResource(collectionResourceRel = "annonces", path = "annonces")
 @CrossOrigin(origins = "http://localhost:4200")
 public interface AnnonceRepository extends JpaRepository<Annonce,Integer> {
 	List<Annonce>findAllByAnnonceur(Integer id);
@@ -38,6 +40,7 @@ public interface AnnonceRepository extends JpaRepository<Annonce,Integer> {
 	Page<Annonce> findByTypeAndAvailableTrue(@Param("type")String type,Pageable pagebale);
 	
 	Page<Annonce> findByTypeAndCapaciteGreaterThanEqualAndAvailableTrue(@Param("type")String type,@Param("nombre") int nombre,Pageable pagebale);
+   
 
 	
 	

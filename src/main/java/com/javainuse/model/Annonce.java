@@ -53,6 +53,12 @@ public class Annonce {
 
 
 
+	public Annonce(Integer value, String string) {
+		// TODO Auto-generated constructor stub
+	}
+
+
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id_annonce")

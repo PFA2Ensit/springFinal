@@ -9,6 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import com.javainuse.model.Etudiant;
+import com.javainuse.repository.AnnonceRepository;
 import com.javainuse.repository.EtudiantRepository;
 
 @SpringBootApplication
