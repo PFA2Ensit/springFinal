@@ -1,8 +1,7 @@
 package com.javainuse.repository;
 
 import java.util.List;
-
-
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,6 +39,8 @@ public interface AnnonceRepository extends JpaRepository<Annonce,Integer> {
 	Page<Annonce> findByTypeAndAvailableTrue(@Param("type")String type,Pageable pagebale);
 	
 	Page<Annonce> findByTypeAndCapaciteGreaterThanEqualAndAvailableTrue(@Param("type")String type,@Param("nombre") int nombre,Pageable pagebale);
+
+	Optional<Annonce> findByDescription(String description);
    
 
 	

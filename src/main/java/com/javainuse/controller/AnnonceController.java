@@ -10,6 +10,7 @@ import java.util.HashMap;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -40,6 +41,7 @@ import com.javainuse.model.Annonce;
 import com.javainuse.model.DAOUser;
 import com.javainuse.repository.AnnonceRepository;
 import com.javainuse.dao.UserDao;
+import com.javainuse.exception.ResourceExistsException;
 @CrossOrigin(origins = "http://localhost:4200",allowedHeaders="*")
 
 @RestController
@@ -59,7 +61,7 @@ public class AnnonceController {
 	}
 	
 	@RequestMapping(value = "/annonces", method = RequestMethod.POST)
-    public Annonce createAnnonce(@RequestBody Annonce annonce) {
+    public Annonce createAnnonce(@RequestBody Annonce annonce) throws ResourceExistsException {
 		annonce.setAnnonceur(annonce.getAnnonceur());
 		annonce.setCapacite(annonce.getCapacite());
 		annonce.setDescription(annonce.getDescription());
@@ -68,9 +70,17 @@ public class AnnonceController {
 		annonce.setType(annonce.getType());
 		annonce.setPrix(annonce.getPrix());
 		annonce.setImage_url(annonce.getImage_url());
-  	
+		 Optional < Annonce > productDb = this.annonceRepository.findByDescription(annonce.getDescription());
+
+	        if (productDb.isPresent()) {
+	        	throw new ResourceExistsException("Announce already exists " );
+	        }else {
+	        	
+	        	 return annonceRepository.save(annonce);
+	        }
+	        
 		
-         return annonceRepository.save(annonce);
+        
     }
 	
 
