@@ -40,6 +40,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.javainuse.model.Annonce;
 import com.javainuse.model.DAOUser;
 import com.javainuse.repository.AnnonceRepository;
+import com.javainuse.serialize.JsonSerializeUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javainuse.dao.UserDao;
 import com.javainuse.exception.ResourceExistsException;
 @CrossOrigin(origins = "http://localhost:4200",allowedHeaders="*")
@@ -59,6 +62,14 @@ public class AnnonceController {
 		super();
 		this.annonceRepository = annonceRepository;
 	}
+	
+	@RequestMapping(value = "/annonces", method = RequestMethod.GET)
+	public String get() throws JsonProcessingException{
+
+		return JsonSerializeUtils.serializeObjectToString(annonceRepository.get());
+	}
+	
+	
 	
 	@RequestMapping(value = "/annonces", method = RequestMethod.POST)
     public Annonce createAnnonce(@RequestBody Annonce annonce) throws ResourceExistsException {

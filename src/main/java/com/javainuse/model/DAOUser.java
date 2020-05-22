@@ -1,6 +1,7 @@
 package com.javainuse.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,6 +36,8 @@ public class DAOUser {
 	@Column(name="phone")
 	private String phone;
 	
+    @JsonManagedReference
+
 	@OneToMany(cascade=CascadeType.ALL,mappedBy="annonceur")
     private Set<Annonce> annonce;
 

@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -91,7 +92,7 @@ public class Annonce {
 	
 	@Column(name="genre")
 	private String genre;
-	
+	@JsonBackReference
 	 @ManyToOne
 	 @JoinColumn(name = "id_annonceur",insertable =true)
 	private DAOUser annonceur;

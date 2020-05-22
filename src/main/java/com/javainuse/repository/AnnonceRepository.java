@@ -12,8 +12,10 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.javainuse.model.Annonce;
+import com.javainuse.model.DAOUser;
 
 @Repository
 @RepositoryRestResource(collectionResourceRel = "annonces", path = "annonces")
@@ -41,8 +43,18 @@ public interface AnnonceRepository extends JpaRepository<Annonce,Integer> {
 	Page<Annonce> findByTypeAndCapaciteGreaterThanEqualAndAvailableTrue(@Param("type")String type,@Param("nombre") int nombre,Pageable pagebale);
 
 	Optional<Annonce> findByDescription(String description);
-   
-
+	@RestResource(path="count")
+	@Query(value="SELECT count(*) FROM annonce ",nativeQuery = true)
+	 long count();
+	
+	@Query(value="SELECT * FROM annonce ", nativeQuery = true)
+	List<Annonce> get();
+	
+	/*@Query(value="FROM annonce a WHERE a.nom_ecole like :name AND a.annonceur.id_annonceur =:id ", nativeQuery = true)
+	List<Annonce> res(@Param("name") String keyword,@Param("id") Integer id);*/
+	
+	@RestResource(path = "searchbykeyword")
+	Page<Annonce> findByNomEcoleContainingAndAnnonceur(@Param("name") String keyword,@RequestBody DAOUser annonceur, Pageable pageable);
 	
 	
 	
