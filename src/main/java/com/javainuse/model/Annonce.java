@@ -1,8 +1,8 @@
 package com.javainuse.model;
 
-import java.util.Date
+import java.util.Date;
 
-;
+
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -18,7 +18,10 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.json.JSONObject;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -85,6 +88,8 @@ public class Annonce {
 	private String image_url;
 	
 	@Column(name="date_ajout")
+	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
+
 	private Date dateAjout = new Date();
 	
 	@Column(name="available")
@@ -93,9 +98,42 @@ public class Annonce {
 	@Column(name="genre")
 	private String genre;
 	@JsonBackReference
-	 @ManyToOne
+	
+	 @ManyToOne(cascade = CascadeType.PERSIST)
 	 @JoinColumn(name = "id_annonceur",insertable =true)
 	private DAOUser annonceur;
+	
+	 public String toString(){
+	      String info = "";
+	      
+	        JSONObject jsonInfo = new JSONObject();
+	        jsonInfo.put("id",this.Id);
+	        jsonInfo.put("nomEcole",this.nomEcole);	        
+
+	        jsonInfo.put("prix",this.prix);
+	        jsonInfo.put("description",this.description);
+	        jsonInfo.put("capacite",this.capacite);
+	        jsonInfo.put("type",this.type);
+	        jsonInfo.put("image_url",this.image_url);
+	        jsonInfo.put("dateAjout",this.dateAjout);
+	        jsonInfo.put("available",this.available);
+	        jsonInfo.put("genre",this.genre);
+
+	        
+
+	        JSONObject companyObj = new JSONObject();
+	        companyObj.put("username", this.annonceur.getUsername());
+	        companyObj.put("email", this.annonceur.getEmail());
+	        companyObj.put("password", this.annonceur.getPassword());
+	        companyObj.put("phone", this.annonceur.getPhone());
+
+
+
+	        jsonInfo.put("company", companyObj);
+	        
+	        info = jsonInfo.toString();
+	        return info;
+	    }
 	 
 	 
 

@@ -18,6 +18,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.Valid;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -115,15 +116,78 @@ public class AnnonceController {
     public ResponseEntity<Page<Annonce>> getAccountsHal(Pageable pageRequest, PersistentEntityResourceAssembler assembler){
         return new ResponseEntity(pagedAssembler.toResource(getAccounts(pageRequest)), HttpStatus.OK);
     }
-	
+	*/
 	@RequestMapping(value = "/annonces/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Annonce> getAnnonceById(@PathVariable(value = "id") Integer Id)
+    public String getAnnonceById(@PathVariable(value = "id") Integer Id)
         throws ResourceNotFoundException {
     	Annonce annonce = annonceRepository.findById(Id)
-          .orElseThrow(() -> new ResourceNotFoundException("Add not found for this id :: " + Id));
-        return ResponseEntity.ok().body(annonce);
+          .orElseThrow(() -> new ResourceNotFoundException("Announce not found for this id :: " + Id));
+    	String info = "";
+	      
+        JSONObject jsonInfo = new JSONObject();
+        jsonInfo.put("id",annonce.getId());
+        jsonInfo.put("nomEcole",annonce.getNomEcole());	        
+
+        jsonInfo.put("prix",annonce.getPrix());
+        jsonInfo.put("description",annonce.getDescription());
+        jsonInfo.put("capacite",annonce.getCapacite());
+        jsonInfo.put("type",annonce.getType());
+        jsonInfo.put("image_url",annonce.getImage_url());
+        jsonInfo.put("available",annonce.getAvailable());
+        jsonInfo.put("genre",annonce.getGenre());
+
+        
+
+        JSONObject companyObj = new JSONObject();
+        companyObj.put("username", annonce.getAnnonceur().getUsername());
+        companyObj.put("email", annonce.getAnnonceur().getEmail());
+        companyObj.put("password", annonce.getAnnonceur().getPassword());
+        companyObj.put("phone", annonce.getAnnonceur().getPhone());
+
+
+
+        jsonInfo.put("annonceur", companyObj);
+        
+        info = jsonInfo.toString();
+        return info;
+    	
+        //return ResponseEntity.ok().body(annonce);
     }
-    
+	/*@RequestMapping(value = "/annonces/{id}", method = RequestMethod.GET)
+	Annonce getann(@PathVariable(value = "id") Integer Id){
+		
+		 String info = "";
+	      
+	        JSONObject jsonInfo = new JSONObject();
+	        jsonInfo.put("id",this.Id);
+	        jsonInfo.put("nomEcole",this.nomEcole);	        
+
+	        jsonInfo.put("prix",this.prix);
+	        jsonInfo.put("description",this.description);
+	        jsonInfo.put("capacite",this.capacite);
+	        jsonInfo.put("type",this.type);
+	        jsonInfo.put("image_url",this.image_url);
+	        jsonInfo.put("dateAjout",this.dateAjout);
+	        jsonInfo.put("available",this.available);
+	        jsonInfo.put("genre",this.genre);
+
+	        
+
+	        JSONObject companyObj = new JSONObject();
+	        companyObj.put("username", this.annonceur.getUsername());
+	        companyObj.put("email", this.annonceur.getEmail());
+	        companyObj.put("password", this.annonceur.getPassword());
+	        companyObj.put("phone", this.annonceur.getPhone());
+
+
+
+	        jsonInfo.put("company", companyObj);
+	        
+	        info = jsonInfo.toString();
+	        return info;
+		return annonceRepository.getann(Id);
+		
+	}*/
    
     
     
@@ -131,19 +195,19 @@ public class AnnonceController {
     public ResponseEntity<Annonce> updateAnnonce(@PathVariable(value = "id") Integer annonceId,
          @Valid @RequestBody Annonce details) throws ResourceNotFoundException {
     	Annonce annonce = annonceRepository.findById(annonceId)
-        .orElseThrow(() -> new ResourceNotFoundException("	Add not found for this id :: " + annonceId));
-
-    	annonce.setAvailable(annonce.getAvailable());
-    	annonce.setImage_url(annonce.getImage_url());
-    	annonce.setPrix(annonce.getPrix());
-    	annonce.setType(annonce.getType());
-    	annonce.setGenre(annonce.getGenre());
-    	annonce.setDateAjout(annonce.getDateAjout());
-        annonce.setDescription(annonce.getDescription());
-    	final Annonce updatedStudent = annonceRepository.save(annonce);
-        return ResponseEntity.ok(updatedStudent);
+        .orElseThrow(() -> new ResourceNotFoundException("	Announce not found for this id :: " + annonceId));
+    	//annonce.setAnnonceur(details.getAnnonceur());
+    	annonce.setNomEcole(details.getNomEcole());
+        annonce.setCapacite(details.getCapacite());
+    	annonce.setImage_url(details.getImage_url());
+    	annonce.setPrix(details.getPrix());
+    	annonce.setType(details.getType());
+    	annonce.setGenre(details.getGenre());
+        annonce.setDescription(details.getDescription());
+    	final Annonce updated = annonceRepository.save(annonce);
+        return ResponseEntity.ok(updated);
     }
-    @RequestMapping(value = "/annonces/{id}", method = RequestMethod.DELETE)
+   @RequestMapping(value = "/annonces/{id}", method = RequestMethod.DELETE)
     public Map<String, Boolean> deleteAnnonce(@PathVariable(value = "id") Integer Id)
          throws ResourceNotFoundException {
     	Annonce annonce = annonceRepository.findById(Id)
@@ -153,7 +217,7 @@ public class AnnonceController {
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;
-    }*/
+    }
     
     
     

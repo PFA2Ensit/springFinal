@@ -38,7 +38,7 @@ public class DAOUser {
 	
     @JsonManagedReference
 
-	@OneToMany(cascade=CascadeType.ALL,mappedBy="annonceur")
+	@OneToMany(cascade=CascadeType.ALL,orphanRemoval = true,mappedBy="annonceur")
     private Set<Annonce> annonce;
 
 	@Override

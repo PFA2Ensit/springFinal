@@ -12,6 +12,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.javainuse.model.Annonce;
@@ -50,13 +51,16 @@ public interface AnnonceRepository extends JpaRepository<Annonce,Integer> {
 	@Query(value="SELECT * FROM annonce ", nativeQuery = true)
 	List<Annonce> get();
 	
-	/*@Query(value="FROM annonce a WHERE a.nom_ecole like :name AND a.annonceur.id_annonceur =:id ", nativeQuery = true)
-	List<Annonce> res(@Param("name") String keyword,@Param("id") Integer id);*/
+	@Query(value="SELECT * FROM annonce WHERE id_annonce=?1 ", nativeQuery = true)
+	Annonce getann(@PathVariable(value = "id") Integer Id );
+	
+	
 	
 	@RestResource(path = "searchbykeyword")
 	Page<Annonce> findByNomEcoleContainingAndAnnonceur(@Param("name") String keyword,@RequestBody DAOUser annonceur, Pageable pageable);
 	
-	
+	@RestResource(path = "getAdd")
+	Annonce findByDescriptionAndAnnonceur(@Param("desc") String desc,@RequestBody DAOUser annonceur);
 	
 	
 
